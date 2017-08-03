@@ -15,8 +15,8 @@ public interface BirdStorageService {
 
     Bird getBirdFromStorage(String name);
 
-    int getStatisticSold(Bird bird);
-    int getStatisticLeft(Bird bird);
+    int getStatisticSold(String name);
+    int getStatisticLeft(String name);
 
     void printReportLeft();
     void printReportSold();
