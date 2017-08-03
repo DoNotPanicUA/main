@@ -42,13 +42,13 @@ public class MainBirdStorageService implements BirdStorageService {
     }
 
     @Override
-    public int getStatisticSold(Bird bird) {
-        return linkedStorage.findObjByName(bird.getName()).getSoldNumber();
+    public int getStatisticSold(String name) {
+        return linkedStorage.findObjByName(name).getSoldNumber();
     }
 
     @Override
-    public int getStatisticLeft(Bird bird) {
-        return linkedStorage.findObjByName(bird.getName()).getStorageLeftNumber();
+    public int getStatisticLeft(String name) {
+        return linkedStorage.findObjByName(name).getStorageLeftNumber();
     }
 
     @Override
@@ -178,7 +178,11 @@ public class MainBirdStorageService implements BirdStorageService {
     @Override
     public Bird getBirdFromStorage(String name) {
         Storage.StorageObject storageObject = linkedStorage.findObjByName(name);
-        Bird result;
+        Bird result = null;
+
+        if (storageObject == null){
+            return result;
+        }
 
         if (storageObject.getStorageObject() instanceof  Bird){
             if (linkedStorage.sellObject(storageObject.getStorageUID())){

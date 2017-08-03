@@ -13,11 +13,11 @@ public class BirdStore {
         setBirdStorageService(birdStorageService);
     }
 
-    public void fillStorage(Bird bird, int quantity){
-        if (birdStorageService.checkBirdExists(bird)){
-            birdStorageService.fillBirdStore(bird, quantity);
+    public void fillStorage(String name, int quantity){
+        if (birdStorageService.checkBirdExists(name)){
+            birdStorageService.fillBirdStore(name, quantity);
         }else{
-            birdStorageService.addBird(bird, 0D, quantity);
+            birdStorageService.addBird(new Bird(name), 0D, quantity);
         }
     }
 
@@ -32,7 +32,7 @@ public class BirdStore {
     public Bird buyBird(String name){
         Bird bird = birdStorageService.getBirdFromStorage(name);
         if (bird == null){
-            System.out.println("Sorry, we don't have such bird");
+            System.out.println("Sorry, we don't have a " + name);
             return null;
         }else{
             return bird;

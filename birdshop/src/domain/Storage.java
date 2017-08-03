@@ -133,7 +133,7 @@ public class Storage{
     private boolean checkDuplicatedObj(StorageObject storageObject){
         boolean result = false;
         for (StorageObject s : mainStorage){
-            if (s.getObjectName().equals(storageObject.getObjectName()) || s.getStorageUID() == storageObject.getStorageUID()){
+            if (s.getObjectName().equals(storageObject.getObjectName())){
                 result = true;
                 break;
             }

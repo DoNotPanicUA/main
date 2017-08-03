@@ -20,8 +20,9 @@ public class Bird implements Named, Priceable {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public Bird setPrice(Double price) {
         this.price = price;
+        return this;
     }
 
     @Override
