@@ -1,21 +1,22 @@
 package domain;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by Red8 on 03/08/2017.
  */
-public class Storage {
-    List<StorageObject> mainStorage = new ArrayList<>();
-    private static int sequenceUID = 0;
+public class Storage{
+    private List<StorageObject> mainStorage = new ArrayList<>();
 
     public <T extends Named> void addStorageObject(T b, int initialQuantity){
         StorageObject obj = getStorageObject(b, initialQuantity);
 
         if (!checkDuplicatedObj(obj)){
-            obj.setStorageUID(getUID());
-            mainStorage.add(obj);
+            int index = mainStorage.size();
+            obj.setStorageUID(index);
+            mainStorage.add(obj.getStorageUID(), obj);
         }else{
             System.out.println("Such object already exists!");
         }
@@ -32,33 +33,43 @@ public class Storage {
         return result;
     }
 
-    private int getUID(){
-        return ++sequenceUID;
+    public StorageObject getObjectByUID(int uid){
+        try{
+            return mainStorage.get(uid);
+        }catch(NullPointerException e){
+            System.out.println("ERROR: UID not found!");
+            return null;
+        }
     }
 
-    private boolean checkDuplicatedObj(StorageObject storageObject){
-        boolean result = false;
-        for (StorageObject s : mainStorage){
-            if (s.getObjectName().equals(storageObject) || s.getStorageUID() == storageObject.getStorageUID()){
-                result = true;
-                break;
-            }
+    public boolean sellObject(int storageUID){
+        boolean result;
+
+        StorageObject storageObject = getObjectByUID(storageUID);
+        if (storageObject.getStorageLeftNumber() >= 1){
+            storageObject.decrementLeft();
+            storageObject.incrementSold();
+            result = true;
+        }else{
+            result = false;
         }
+
         return result;
     }
 
-    private <T extends Named> StorageObject getStorageObject(T b, int initialQuantity){
-        StorageObject newObject = new StorageObject();
-        newObject.setStorageObject(b);
-        newObject.setObjectName(b.getName());
+    public Iterator<Storage.StorageObject> getIterator() {
+        return mainStorage.iterator();
+    }
 
-        if (initialQuantity >= 0){
-            newObject.setStorageLeftNumber(initialQuantity);
-        }else{
-            newObject.setStorageLeftNumber(0);
-        }
+    public <T extends Named> void updateStoredObject(T object, int storageUID){
+        StorageObject newObject = mainStorage.get(storageUID);
+        newObject.setObjectName(object.getName());
+        newObject.setStorageObject(object);
+        updateStoredObject(newObject);
+    }
 
-        return newObject;
+    public void updateStoredObject(StorageObject storageObject){
+        mainStorage.set(storageObject.getStorageUID(), storageObject);
     }
 
     public static class StorageObject{
@@ -109,6 +120,39 @@ public class Storage {
         public void setSoldNumber(int soldNumber) {
             this.soldNumber = soldNumber;
         }
+
+        public void incrementSold(){
+            soldNumber++;
+        }
+
+        public void decrementLeft(){
+            storageLeftNumber--;
+        }
+    }
+
+    private boolean checkDuplicatedObj(StorageObject storageObject){
+        boolean result = false;
+        for (StorageObject s : mainStorage){
+            if (s.getObjectName().equals(storageObject.getObjectName()) || s.getStorageUID() == storageObject.getStorageUID()){
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
+    private <T extends Named> StorageObject getStorageObject(T b, int initialQuantity){
+        StorageObject newObject = new StorageObject();
+        newObject.setStorageObject(b);
+        newObject.setObjectName(b.getName());
+
+        if (initialQuantity >= 0){
+            newObject.setStorageLeftNumber(initialQuantity);
+        }else{
+            newObject.setStorageLeftNumber(0);
+        }
+
+        return newObject;
     }
 
 }

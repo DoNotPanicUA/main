@@ -13,9 +13,7 @@ public interface BirdStorageService {
     void addBird(Bird b, Double price);
     void addBird(Bird b, Double price, int initialQuantity);
 
-    Bird getBirdFromStore(String name);
-
-    Double getBirdPrice(String name);
+    Bird getBirdFromStorage(String name);
 
     int getStatisticSold(Bird bird);
     int getStatisticLeft(Bird bird);
@@ -30,8 +28,8 @@ public interface BirdStorageService {
     boolean checkBirdExists(Bird bird);
     boolean checkBirdExists(String name);
 
-    void setBirdCost(Bird bird, Double price);
-    void setBirdCost(String name, Double price);
+    void setBirdPrice(Bird bird, Double price);
+    void setBirdPrice(String name, Double price);
 
     List<Bird> getAllBirds();
 }

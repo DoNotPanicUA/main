@@ -17,7 +17,7 @@ public class BirdStore {
         if (birdStorageService.checkBirdExists(bird)){
             birdStorageService.fillBirdStore(bird, quantity);
         }else{
-            birdStorageService.addBird(bird, new Double(0), quantity);
+            birdStorageService.addBird(bird, 0D, quantity);
         }
     }
 
@@ -26,11 +26,11 @@ public class BirdStore {
     }
 
     public void setBirdPrice(String name, Double price){
-        birdStorageService.setBirdCost(name, price);
+        birdStorageService.setBirdPrice(name, price);
     }
 
     public Bird buyBird(String name){
-        Bird bird = birdStorageService.getBirdFromStore(name);
+        Bird bird = birdStorageService.getBirdFromStorage(name);
         if (bird == null){
             System.out.println("Sorry, we don't have such bird");
             return null;

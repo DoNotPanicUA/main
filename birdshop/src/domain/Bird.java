@@ -3,7 +3,7 @@ package domain;
 /**
  * Created by Red8 on 03/08/2017.
  */
-public class Bird implements Named {
+public class Bird implements Named, Priceable {
 
     private final String name;
     private Double price;
