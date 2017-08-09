@@ -6,6 +6,8 @@ package domains;
 public abstract class AbstractAirplane {
     private Location currentLocation;
     private boolean isFueled;
+    private Route currentRoute;
+    private Double maxSpeed;
 
     // Public
     public void refuelPlane(){
