@@ -1,22 +1,22 @@
-package freshstart.domain;
+package freshstart.domain.location;
 
 /**
  * Created by DoNotPanic-UA on 04.08.2017.
  */
 public class Coordinates {
-    private final int X;
-    private final int Y;
+    private final double X;
+    private final double Y;
 
-    public Coordinates(int x, int y){
+    public Coordinates(double x, double y){
         this.X = x;
         this.Y = y;
     }
 
-    public int getX(){
+    public double getX(){
         return this.X;
     }
 
-    public int getY(){
+    public double getY(){
         return this.Y;
     }
 

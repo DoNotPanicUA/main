@@ -1,4 +1,7 @@
-package freshstart.domain;
+package freshstart.domain.common;
+
+import freshstart.domain.location.Coordinates;
+import freshstart.domain.location.Location;
 
 import java.util.Date;
 

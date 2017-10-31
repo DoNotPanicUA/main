@@ -1,14 +1,25 @@
 package freshstart.domain.airport;
 
-import freshstart.domain.*;
-
-import java.util.Date;
+import freshstart.domain.aircraft.Plane;
+import freshstart.domain.common.PrintService;
+import freshstart.domain.common.TimeInMilliSec;
+import freshstart.domain.location.Coordinates;
+import freshstart.domain.location.Location;
 
 /**
  * Created by aleonets on 21.08.2017.
  */
 public class RadioTower implements Location {
     private Airport linkedAirport;
+
+    @Override
+    public void setCoordinates(Coordinates coordinates){
+    }
+
+    @Override
+    public Location getGlobalLocation() {
+        return linkedAirport;
+    }
 
     @Override
     public String getObjectName() {

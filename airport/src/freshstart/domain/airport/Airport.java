@@ -1,16 +1,18 @@
 package freshstart.domain.airport;
 
-import freshstart.domain.*;
+import freshstart.domain.common.Actions;
+import freshstart.domain.common.PrintService;
+import freshstart.domain.location.Coordinates;
+import freshstart.domain.location.Location;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 /**
  * Created by aleonets on 21.08.2017.
  */
-public class Airport extends Thread implements Location{
+public class Airport extends Thread implements Location {
     private String airportName;
     private List<Airstrip> airstrips = new ArrayList<>();
     private List<PlaneParkingPlace> parkingPlaces = new ArrayList<>();
@@ -19,6 +21,11 @@ public class Airport extends Thread implements Location{
     private PlaneService planeService;
     private List<Airport> linkedAirports = new ArrayList<>();
     private Coordinates coordinates;
+
+    @Override
+    public Location getGlobalLocation() {
+        return this;
+    }
 
     public String getObjectName() {
         return "Airport("+airportName+")";
@@ -108,14 +115,14 @@ public class Airport extends Thread implements Location{
     private void iniAirport(){
         //this.setLinkedAirports(airports);
         if (coordinates == null){
-            setCoordinates(new Coordinates(new Random().nextInt(10000),new Random().nextInt(10000)));
+            setCoordinates(new Coordinates(new Random().nextInt(100),new Random().nextInt(100)));
         }
 
         int numAirstrips = new Random().nextInt(2)+1;
         int numParks = new Random().nextInt(numAirstrips*10)+numAirstrips;
 
         for (int i = 0 ; i < numAirstrips ; i++){
-            this.addAirstrip(new Airstrip());
+            this.addAirstrip(new Airstrip(this));
         }
 
         for (int i = 0 ; i < numParks ; i++){

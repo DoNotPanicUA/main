@@ -1,4 +1,4 @@
-package freshstart.domain;
+package freshstart.domain.common;
 
 /**
  * Created by aleonets on 23.08.2017.
