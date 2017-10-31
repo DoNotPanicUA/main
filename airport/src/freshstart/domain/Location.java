@@ -8,4 +8,5 @@ import freshstart.domain.Coordinates;
 public interface Location extends Named {
 
     Coordinates getCoordinates();
+    void setCoordinates(Coordinates coordinates);
 }

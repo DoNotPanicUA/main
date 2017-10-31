@@ -1,9 +1,6 @@
 package freshstart.domain.airport;
 
-import freshstart.domain.Coordinates;
-import freshstart.domain.Location;
-import freshstart.domain.PrintService;
-import freshstart.domain.TimeInMilliSec;
+import freshstart.domain.*;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,13 +33,9 @@ public class Airport extends Thread implements Location{
     public void run() {
         super.run();
         iniAirport();
-        PrintService.printMessageObj("The airport is online.", this);
+
         while(true){
-            try {
-                Thread.sleep(TimeInMilliSec.MINUTE.getTimeInMilliSecs());
-            }catch (InterruptedException e){
-                return;
-            }
+            Actions.STANDBY.doAction();
             PrintService.printMessageObj("Ping.", this);
         }
     }
@@ -114,6 +107,10 @@ public class Airport extends Thread implements Location{
 
     private void iniAirport(){
         //this.setLinkedAirports(airports);
+        if (coordinates == null){
+            setCoordinates(new Coordinates(new Random().nextInt(10000),new Random().nextInt(10000)));
+        }
+
         int numAirstrips = new Random().nextInt(2)+1;
         int numParks = new Random().nextInt(numAirstrips*10)+numAirstrips;
 
@@ -124,11 +121,11 @@ public class Airport extends Thread implements Location{
         for (int i = 0 ; i < numParks ; i++){
             this.addParkingPlace(new PlaneParkingPlace());
         }
+
+        PrintService.printMessageObj("The airport is online.", this);
         radioTower = new RadioTower(this);
         passengerService = new PassengerService(this);
         planeService = new PlaneService(this);
-        if (coordinates == null){
-            setCoordinates(new Coordinates(new Random().nextInt(10000),new Random().nextInt(10000)));
-        }
+
     }
 }
