@@ -21,28 +21,28 @@ public class Plane extends Thread implements Location {
     private final Double planeSpeed = 0.2 /*Realistic 0.2 km/sec*/;
     private final Actions flyAction = Actions.PLANE_FLYMIN;
 
-    Plane(String boardName, Coordinates coordinates){
+    public Plane(String boardName, Coordinates coordinates){
         this.boardName = boardName;
         this.coordinates = coordinates;
         PrintService.printMessageObj("The plane has been created.", this);
     }
 
-    void setRoute(Route route){
+    public void setRoute(Route route){
         this.route = route;
         PrintService.printMessageObj("A new rout from " + route.getDestinationFrom().getObjectName() + " to " +
                 route.getDestinationTo().getObjectName() + " has been assigned", this);
     }
 
-    void setCurrentLocation(Location currentLocation){
+    public void setCurrentLocation(Location currentLocation){
         this.currentLocation = currentLocation;
         PrintService.printMessageObj("The plane is located at the " + currentLocation, this);
     }
 
-    Location getCurrentLocation() {
+    public Location getCurrentLocation() {
         return currentLocation;
     }
 
-    void takeOff(){
+    private void takeOff(){
         Actions.PLANE_TAKEOFF.doAction();
         if (currentLocation instanceof Airstrip){
             ((Airstrip)currentLocation).freeAirstrip();
@@ -50,7 +50,7 @@ public class Plane extends Thread implements Location {
         setCurrentLocation(null);
     }
 
-    void requestRadioTower(){
+    private void requestRadioTower(){
         Actions.PLANE_REQUESTRADIOTOWER.doAction();
         if (currentLocation != null & currentLocation instanceof Airstrip){
             linkedRadioTower = ((Airstrip)currentLocation).getAirport().getRadioTower();
@@ -63,7 +63,7 @@ public class Plane extends Thread implements Location {
         }
     }
 
-    void landPlane(){
+    private void landPlane(){
         requestRadioTower();
         if (linkedRadioTower != null){
             Airstrip requestedAirstrip = linkedRadioTower.requestAirstrip(this);
@@ -83,7 +83,7 @@ public class Plane extends Thread implements Location {
                                        coordinates.getY() + direction.getCoefY() * planeSpeed * flyAction.getDurationSec()));
     }
 
-    void flyByRoute(){
+    private void flyByRoute(){
         if (route != null & route.getFlyDate().before(new Date())){
             while (!currentLocation.getGlobalLocation().equals(route.getDestinationTo().getGlobalLocation())){
                 if (currentLocation != null){

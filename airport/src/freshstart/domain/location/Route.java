@@ -32,12 +32,13 @@ public class Route {
         return direction;
     }
 
-    public void setDestination(Location destinationFrom, Location destinationTo, Date flyDate) {
+    public Route setDestination(Location destinationFrom, Location destinationTo, Date flyDate) {
         this.destinationTo = destinationTo;
         this.destinationFrom = destinationFrom;
         this.flyDate = flyDate;
         GeoLocationService.calculateDistance(destinationTo.getCoordinates(), destinationFrom.getCoordinates());
         GeoLocationService.getDirection(destinationTo.getCoordinates(), destinationFrom.getCoordinates());
+        return this;
     }
 
 

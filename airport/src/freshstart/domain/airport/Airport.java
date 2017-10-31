@@ -43,7 +43,7 @@ public class Airport extends Thread implements Location {
 
         while(true){
             Actions.STANDBY.doAction();
-            PrintService.printMessageObj("Ping.", this);
+            //PrintService.printMessageObj("Ping.", this);
         }
     }
 
