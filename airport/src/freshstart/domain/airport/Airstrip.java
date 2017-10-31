@@ -12,7 +12,7 @@ public class Airstrip {
         this.currentPlane = null;
     }
 
-    public synchronized void reservAirstip(Plane plane){
+    synchronized void reserveAirship(Plane plane){
         if (currentPlane == null){
             currentPlane = plane;
         }
@@ -22,7 +22,7 @@ public class Airstrip {
         return currentPlane;
     }
 
-    public boolean checkIsAirstripFree(){
-        return (currentPlane == null ? true : false);
+    boolean checkIsAirstripFree(){
+        return (currentPlane == null);
     }
 }

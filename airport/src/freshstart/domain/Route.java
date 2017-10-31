@@ -1,6 +1,6 @@
-package domains;
+package freshstart.domain;
 
-import javax.print.attribute.standard.Destination;
+import freshstart.domain.Location;
 
 /**
  * Created by DoNotPanic-UA on 04.08.2017.
@@ -16,6 +16,10 @@ public class Route {
 
     public Location getDestinationTo() {
         return destinationTo;
+    }
+
+    public Double getDistance() {
+        return distance;
     }
 
     public void setDestination(Location destinationFrom, Location destinationTo) {

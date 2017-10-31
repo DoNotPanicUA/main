@@ -1,5 +1,7 @@
 package domains;
 
+import freshstart.domain.Location;
+
 import java.util.ArrayList;
 import java.util.List;
 

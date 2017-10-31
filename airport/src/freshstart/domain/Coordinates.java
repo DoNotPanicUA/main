@@ -1,4 +1,4 @@
-package domains;
+package freshstart.domain;
 
 /**
  * Created by DoNotPanic-UA on 04.08.2017.

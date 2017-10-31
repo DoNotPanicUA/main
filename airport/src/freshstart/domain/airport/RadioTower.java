@@ -1,19 +1,28 @@
 package freshstart.domain.airport;
 
-import freshstart.domain.Plane;
-import freshstart.domain.TimeInMilliSec;
+import freshstart.domain.*;
 
 import java.util.Date;
 
 /**
  * Created by aleonets on 21.08.2017.
  */
-public class RadioTower {
+public class RadioTower implements Location {
     private Airport linkedAirport;
+
+    @Override
+    public String getObjectName() {
+        return "Radio Tower(" + linkedAirport.getAirportName()+ ")";
+    }
+
+    @Override
+    public Coordinates getCoordinates() {
+        return linkedAirport.getCoordinates();
+    }
 
     public RadioTower(Airport airport){
         this.linkedAirport = airport;
-        System.out.println("["+new Date()+"] Radio tower of the " + airport.getAirportName() + " airport is online!");
+        PrintService.printMessageObj("The radio tower is online!", this);
     }
 
     public void setLinkedAirport(Airport airport){
@@ -21,7 +30,7 @@ public class RadioTower {
     }
 
     public synchronized Airstrip requestAirstrip(Plane plane){
-        System.out.println("["+new Date()+"] RadioTower("+ this.linkedAirport.getAirportName()+"): Plane("+ plane.getName() +") has requested an airstrip!");
+        PrintService.printMessageObj("Plane("+ plane.getName() +") has requested an airstrip!", this);
         TimeInMilliSec.MINUTE.sleep();
         Airstrip freeAirstrip = null;
 
@@ -29,15 +38,15 @@ public class RadioTower {
             Airstrip airstrip = linkedAirport.getAirstrips().iterator().next();
 
             if (airstrip.checkIsAirstripFree()){
-                airstrip.reservAirstip(plane);
+                airstrip.reserveAirship(plane);
                 freeAirstrip = airstrip;
             }
         }
 
         if (freeAirstrip == null){
-            System.out.println("["+new Date()+"] RadioTower("+ this.linkedAirport.getAirportName()+"): There is not free airstrip for the Plane("+ plane.getName() +")!");
+            PrintService.printMessageObj("There is not free airstrip for the Plane("+ plane.getName() +")!", this);
         }else{
-            System.out.println("["+new Date()+"] RadioTower("+ this.linkedAirport.getAirportName()+"): Airstrip("+freeAirstrip.toString()+" is free for landing the Plane("+ plane.getName() +")!");
+            PrintService.printMessageObj("Airstrip("+freeAirstrip.toString()+" is free for landing the Plane("+ plane.getName() +")!", this);
         }
 
         return freeAirstrip;

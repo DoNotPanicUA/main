@@ -15,7 +15,7 @@ public class Application {
         knownAirports = createAirports();
     }
 
-    public static List<Airport> createAirports(){
+    private static List<Airport> createAirports(){
         List<Airport> airports = new ArrayList<>();
 
         airports.add(new Airport("Borispol"));
