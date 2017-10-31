@@ -12,8 +12,8 @@ public class GeoLocationService {
     }
 
     public static Direction getDirection(Coordinates coordinatesTo, Coordinates coordinatesFrom){
-        int sideX = coordinatesTo.getX() - coordinatesFrom.getX();
-        int sideY = coordinatesTo.getY() - coordinatesFrom.getY();
+        double sideX = coordinatesTo.getX() - coordinatesFrom.getX();
+        double sideY = coordinatesTo.getY() - coordinatesFrom.getY();
         double hypo = calculateDistance(coordinatesTo, coordinatesFrom);
         return new Direction().setCoefX(sideX/hypo).setCoefY(sideY/hypo);
     }
