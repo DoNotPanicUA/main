@@ -7,7 +7,7 @@ package freshstart.domain.common;
 public enum Actions {
     PLANE_TAKEOFF(TimeInMilliSec.TENSECOND.getTimeInMilliSecs()), STANDBY(TimeInMilliSec.MINUTE.getTimeInMilliSecs()),
     PLANE_REQUESTRADIOTOWER(TimeInMilliSec.FIVESECONDS.getTimeInMilliSecs()), PLANE_LAND(TimeInMilliSec.TENSECOND.getTimeInMilliSecs()),
-    PLANE_FLYMIN(TimeInMilliSec.MINUTE.getTimeInMilliSecs());
+    PLANE_FLYMIN(TimeInMilliSec.MINUTE.getTimeInMilliSecs()), STANDBY_5SEC(TimeInMilliSec.FIVESECONDS.getTimeInMilliSecs());
 
     private int duration;
 

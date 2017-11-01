@@ -45,7 +45,7 @@ public class RadioTower implements Location {
         TimeInMilliSec.MINUTE.sleep();
         Airstrip freeAirstrip = null;
 
-        while (linkedAirport.getAirstrips().iterator().hasNext() || freeAirstrip == null){
+        while (linkedAirport.getAirstrips().iterator().hasNext() & freeAirstrip == null){
             Airstrip airstrip = linkedAirport.getAirstrips().iterator().next();
 
             if (airstrip.checkIsAirstripFree()){

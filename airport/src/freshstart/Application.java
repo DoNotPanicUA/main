@@ -2,6 +2,7 @@ package freshstart;
 
 import freshstart.domain.aircraft.Plane;
 import freshstart.domain.airport.Airport;
+import freshstart.domain.common.Actions;
 import freshstart.domain.location.Route;
 
 import java.util.ArrayList;
@@ -17,6 +18,10 @@ public class Application {
     private static List<Plane> knownPlanes;
     public static void main(String[] args){
         knownAirports = createAirports();
+
+        /*Wait for airports initialization*/
+        Actions.STANDBY_5SEC.doAction();
+
         knownPlanes = createPlanes();
     }
 

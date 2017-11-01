@@ -36,8 +36,8 @@ public class Route {
         this.destinationTo = destinationTo;
         this.destinationFrom = destinationFrom;
         this.flyDate = flyDate;
-        GeoLocationService.calculateDistance(destinationTo.getCoordinates(), destinationFrom.getCoordinates());
-        GeoLocationService.getDirection(destinationTo.getCoordinates(), destinationFrom.getCoordinates());
+        distance = GeoLocationService.calculateDistance(destinationTo.getCoordinates(), destinationFrom.getCoordinates());
+        direction = GeoLocationService.getDirection(destinationTo.getCoordinates(), destinationFrom.getCoordinates());
         return this;
     }
 

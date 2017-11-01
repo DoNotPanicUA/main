@@ -35,7 +35,12 @@ public class Plane extends Thread implements Location {
 
     public void setCurrentLocation(Location currentLocation){
         this.currentLocation = currentLocation;
-        PrintService.printMessageObj("The plane is located at the " + currentLocation, this);
+        if (currentLocation != null){
+            PrintService.printMessageObj("The plane is located at the " + currentLocation.getObjectName(), this);
+        }else{
+            PrintService.printMessageObj("The plane is in the sky", this);
+        }
+
     }
 
     public Location getCurrentLocation() {
@@ -76,7 +81,6 @@ public class Plane extends Thread implements Location {
         }
     }
 
-
     private void fly(Direction direction){
         flyAction.doAction();
         setCoordinates(new Coordinates(coordinates.getX() + direction.getCoefX() * planeSpeed * flyAction.getDurationSec(),
@@ -85,10 +89,10 @@ public class Plane extends Thread implements Location {
 
     private void flyByRoute(){
         if (route != null & route.getFlyDate().before(new Date())){
-            while (!currentLocation.getGlobalLocation().equals(route.getDestinationTo().getGlobalLocation())){
+            while (currentLocation == null || !currentLocation.getGlobalLocation().equals(route.getDestinationTo().getGlobalLocation())){
                 if (currentLocation != null){
                     takeOff();
-                }else if (GeoLocationService.calculateDistance(route.getDestinationTo().getCoordinates(), coordinates) > planeSpeed * flyAction.getDurationSec()){
+                }else if (Math.abs(GeoLocationService.calculateDistance(route.getDestinationTo().getCoordinates(), coordinates)) > Math.abs(planeSpeed * flyAction.getDurationSec())){
                     fly(route.getDirection());
                 }else{
                     landPlane();
