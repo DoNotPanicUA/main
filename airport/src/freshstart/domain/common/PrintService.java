@@ -1,5 +1,6 @@
 package freshstart.domain.common;
 
+import freshstart.domain.location.CoordinateObject;
 import freshstart.domain.location.Coordinates;
 import freshstart.domain.location.Location;
 
@@ -17,9 +18,9 @@ public class PrintService {
         String coorString = "";
         String name = "";
 
-        if (obj instanceof Location){
-            Coordinates coordinates = ((Location) obj).getCoordinates();
-            coorString = (coordinates != null ? String.format("%-6s","[X:" + coordinates.getX() +", ") + String.format("%-6s","Y:"+ coordinates.getY()) +"]" : "");
+        if (obj instanceof CoordinateObject){
+            Coordinates coordinates = ((CoordinateObject) obj).getCoordinates();
+            coorString = (coordinates != null ? String.format("%-10s","[X:" + coordinates.getX() +", ") + String.format("%-7s","Y:"+ coordinates.getY()) +"]" : "");
         }
 
         if (obj instanceof Named){

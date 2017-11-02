@@ -53,8 +53,7 @@ public class Application {
 
     private static List<Plane> createPlanes(){
         List<Plane> planes = new ArrayList<>();
-        Plane newPlane = new Plane("APEK-005", knownAirports.get(0).getAirstrips().get(0).getCoordinates());
-        newPlane.setCurrentLocation(knownAirports.get(0).getAirstrips().get(0));
+        Plane newPlane = new Plane("APEK-005", knownAirports.get(0).getParkingPlaces().get(0));
         newPlane.setRoute(new Route().setDestination(knownAirports.get(0), knownAirports.get(1), new Date()));
         planes.add(newPlane);
         newPlane.start();

@@ -5,9 +5,7 @@ import freshstart.domain.common.Named;
 /**
  * Created by Red8 on 04/08/2017.
  */
-public interface Location extends Named {
+public interface Location extends Named, CoordinateObject {
 
-    Location getGlobalLocation();
-    Coordinates getCoordinates();
-    void setCoordinates(Coordinates coordinates);
+
 }

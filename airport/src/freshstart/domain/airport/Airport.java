@@ -22,11 +22,6 @@ public class Airport extends Thread implements Location {
     private List<Airport> linkedAirports = new ArrayList<>();
     private Coordinates coordinates;
 
-    @Override
-    public Location getGlobalLocation() {
-        return this;
-    }
-
     public String getObjectName() {
         return "Airport("+airportName+")";
     }
@@ -113,7 +108,6 @@ public class Airport extends Thread implements Location {
     }
 
     private void iniAirport(){
-        //this.setLinkedAirports(airports);
         if (coordinates == null){
             setCoordinates(new Coordinates(new Random().nextInt(100),new Random().nextInt(100)));
         }
@@ -121,12 +115,16 @@ public class Airport extends Thread implements Location {
         int numAirstrips = new Random().nextInt(2)+1;
         int numParks = new Random().nextInt(numAirstrips*10)+numAirstrips;
 
-        for (int i = 0 ; i < numAirstrips ; i++){
-            this.addAirstrip(new Airstrip(this));
-        }
+        int i = 0;
+        while (i < numAirstrips || i < numParks) {
+            if (i < numAirstrips) {
+                this.addAirstrip(new Airstrip(this, i));
+            }
 
-        for (int i = 0 ; i < numParks ; i++){
-            this.addParkingPlace(new PlaneParkingPlace());
+            if (i < numParks) {
+                this.addParkingPlace(new PlaneParkingPlace(this, i));
+            }
+            i++;
         }
 
         PrintService.printMessageObj("The airport is online.", this);

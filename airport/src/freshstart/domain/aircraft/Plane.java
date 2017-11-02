@@ -1,9 +1,8 @@
 package freshstart.domain.aircraft;
 
-import freshstart.domain.airport.Airport;
-import freshstart.domain.airport.Airstrip;
-import freshstart.domain.airport.RadioTower;
+import freshstart.domain.airport.*;
 import freshstart.domain.common.Actions;
+import freshstart.domain.common.Named;
 import freshstart.domain.common.PrintService;
 import freshstart.domain.location.*;
 
@@ -12,7 +11,7 @@ import java.util.Date;
 /**
  * Created by aleonets on 23.08.2017.
  */
-public class Plane extends Thread implements Location {
+public class Plane extends Thread implements Named, CoordinateObject {
     private Location currentLocation;
     private Coordinates coordinates;
     private Route route;
@@ -21,10 +20,10 @@ public class Plane extends Thread implements Location {
     private final Double planeSpeed = 0.2 /*Realistic 0.2 km/sec*/;
     private final Actions flyAction = Actions.PLANE_FLYMIN;
 
-    public Plane(String boardName, Coordinates coordinates){
+    public Plane(String boardName, Location location){
         this.boardName = boardName;
-        this.coordinates = coordinates;
-        PrintService.printMessageObj("The plane has been created.", this);
+        PrintService.printMessageObj("The plane has been initialized.", this);
+        setCurrentLocation(location);
     }
 
     public void setRoute(Route route){
@@ -33,9 +32,19 @@ public class Plane extends Thread implements Location {
                 route.getDestinationTo().getObjectName() + " has been assigned", this);
     }
 
-    public void setCurrentLocation(Location currentLocation){
+    private void setCurrentLocation(Location currentLocation){
+        if (this.currentLocation != null & this.currentLocation instanceof PlaneLocation){
+            ((PlaneLocation) this.currentLocation).freeLocation();
+        }
+
+        if (currentLocation != null & currentLocation instanceof PlaneLocation){
+            ((PlaneLocation) currentLocation).reserveLocation(this);
+        }
+
         this.currentLocation = currentLocation;
+
         if (currentLocation != null){
+            setCoordinates(currentLocation.getCoordinates());
             PrintService.printMessageObj("The plane is located at the " + currentLocation.getObjectName(), this);
         }else{
             PrintService.printMessageObj("The plane is in the sky", this);
@@ -47,18 +56,59 @@ public class Plane extends Thread implements Location {
         return currentLocation;
     }
 
-    private void takeOff(){
-        Actions.PLANE_TAKEOFF.doAction();
-        if (currentLocation instanceof Airstrip){
-            ((Airstrip)currentLocation).freeAirstrip();
-        }
-        setCurrentLocation(null);
+    @Override
+    public Coordinates getCoordinates() {
+        return (this.coordinates != null ? new Coordinates(this.coordinates.getX(), this.coordinates.getY()) : null);
     }
 
-    private void requestRadioTower(){
+    private void groundMoveTo(AirportObjects destinationObject){
+        PlaneLocation resultObject = null;
+
+        if (requestRadioTower()){
+            while (resultObject == null){
+                resultObject = linkedRadioTower.requestPlaneLocation(this, destinationObject);
+                if (resultObject != null){
+                    Actions.PLANE_GROUNDMOVE.doAction();
+                    PrintService.printMessageObj("Move to the "+ resultObject.getObjectName(), this);
+                    setCurrentLocation(resultObject);
+                }else{
+                    Actions.STANDBY.doAction();
+                }
+            }
+        }
+    }
+
+    private void moveToAirstrip(){
+        if (!(this.currentLocation instanceof Airstrip)){
+            groundMoveTo(AirportObjects.AIRSTRIP);
+        }
+    }
+
+    private void moveToParking(){
+        if (!(this.currentLocation instanceof PlaneParkingPlace )){
+            groundMoveTo(AirportObjects.PLANEPARKINGPLACE);
+        }
+    }
+
+
+    private void takeOff(){
+        moveToAirstrip();
+
+        if (currentLocation instanceof Airstrip){
+            Actions.PLANE_TAKEOFF.doAction();
+            setCurrentLocation(null);
+        }
+    }
+
+    private boolean requestRadioTower(){
         Actions.PLANE_REQUESTRADIOTOWER.doAction();
-        if (currentLocation != null & currentLocation instanceof Airstrip){
-            linkedRadioTower = ((Airstrip)currentLocation).getAirport().getRadioTower();
+        if (currentLocation != null & currentLocation instanceof ChildLocation){
+            if (((ChildLocation) currentLocation).getParentLocation() instanceof Airport) {
+                linkedRadioTower = ((ChildLocation<Airport>) currentLocation).getParentLocation().getRadioTower();
+                PrintService.printMessageObj("Linked with local Radio Tower" + linkedRadioTower.getObjectName(), this);
+            }
+        }else if(currentLocation != null & currentLocation instanceof Airport){
+            linkedRadioTower = ((Airport) currentLocation).getRadioTower();
             PrintService.printMessageObj("Linked with local Radio Tower" + linkedRadioTower.getObjectName(), this);
         }else if (currentLocation == null & route != null){
             if (route.getDestinationTo() instanceof Airport){
@@ -66,17 +116,26 @@ public class Plane extends Thread implements Location {
                 PrintService.printMessageObj("Linked with foreign Radio Tower" + linkedRadioTower.getObjectName(), this);
             }
         }
+        if (linkedRadioTower == null){
+            PrintService.printMessageObj("An radio tower doesn't reply.", this);
+        }
+        return (linkedRadioTower != null);
     }
 
     private void landPlane(){
-        requestRadioTower();
-        if (linkedRadioTower != null){
-            Airstrip requestedAirstrip = linkedRadioTower.requestAirstrip(this);
-            if (requestedAirstrip != null){
-                Actions.PLANE_LAND.doAction();
-                currentLocation = requestedAirstrip;
-                setCoordinates(requestedAirstrip.getCoordinates());
-                PrintService.printMessageObj("Landed on the "+ currentLocation.getObjectName(), this);
+        if (requestRadioTower()){
+            Airstrip requestedAirstrip = null;
+            while (requestedAirstrip == null){
+                requestedAirstrip = linkedRadioTower.requestPlaneLocation(this, AirportObjects.AIRSTRIP);
+                if (requestedAirstrip != null){
+                    Actions.PLANE_LAND.doAction();
+                    PrintService.printMessageObj("Landed on the "+ requestedAirstrip.getObjectName(), this);
+                    setCurrentLocation(requestedAirstrip);
+
+                    moveToParking();
+                }else{
+                    Actions.STANDBY.doAction();
+                }
             }
         }
     }
@@ -87,9 +146,27 @@ public class Plane extends Thread implements Location {
                                        coordinates.getY() + direction.getCoefY() * planeSpeed * flyAction.getDurationSec()));
     }
 
+    private boolean compareGlobalLocations(Location firstLocation, Location secondLocation){
+        Location firstGlobalLocation;
+        Location secondGlobalLocation;
+        if (firstLocation instanceof ChildLocation){
+            firstGlobalLocation = ((ChildLocation)firstLocation).getParentLocation();
+        }else{
+            firstGlobalLocation = firstLocation;
+        }
+
+        if (secondLocation instanceof ChildLocation){
+            secondGlobalLocation = ((ChildLocation)secondLocation).getParentLocation();
+        }else{
+            secondGlobalLocation = secondLocation;
+        }
+
+        return (firstGlobalLocation.equals(secondGlobalLocation));
+    }
+
     private void flyByRoute(){
         if (route != null & route.getFlyDate().before(new Date())){
-            while (currentLocation == null || !currentLocation.getGlobalLocation().equals(route.getDestinationTo().getGlobalLocation())){
+            while (currentLocation == null || !compareGlobalLocations(currentLocation, route.getDestinationTo())){
                 if (currentLocation != null){
                     takeOff();
                 }else if (Math.abs(GeoLocationService.calculateDistance(route.getDestinationTo().getCoordinates(), coordinates)) > Math.abs(planeSpeed * flyAction.getDurationSec())){
@@ -103,11 +180,6 @@ public class Plane extends Thread implements Location {
         }
     }
 
-    @Override
-    public Location getGlobalLocation() {
-        return currentLocation.getGlobalLocation();
-    }
-
     public void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
         PrintService.printMessageObj("Update coordinates", this);
@@ -116,16 +188,6 @@ public class Plane extends Thread implements Location {
     @Override
     public String getObjectName() {
         return "Plane("+boardName+")";
-    }
-
-    @Override
-    public Coordinates getCoordinates() {
-        return coordinates;
-    }
-
-    public void crashPlane(){
-        PrintService.printMessageObj("The plane has been crashed!!!", this);
-        this.interrupt();
     }
 
     @Override
