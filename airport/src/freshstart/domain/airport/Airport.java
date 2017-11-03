@@ -12,7 +12,7 @@ import java.util.Random;
 /**
  * Created by aleonets on 21.08.2017.
  */
-public class Airport extends Thread implements Location {
+public class Airport implements Location, Runnable {
     private String airportName;
     private List<Airstrip> airstrips = new ArrayList<>();
     private List<PlaneParkingPlace> parkingPlaces = new ArrayList<>();
@@ -21,6 +21,10 @@ public class Airport extends Thread implements Location {
     private PlaneService planeService;
     private List<Airport> linkedAirports = new ArrayList<>();
     private Coordinates coordinates;
+
+    Airport(String airportName){
+        this.airportName = airportName;
+    }
 
     public String getObjectName() {
         return "Airport("+airportName+")";
@@ -33,12 +37,8 @@ public class Airport extends Thread implements Location {
 
     @Override
     public void run() {
-        super.run();
-        iniAirport();
-
         while(true){
             Actions.STANDBY.doAction();
-            //PrintService.printMessageObj("Ping.", this);
         }
     }
 
@@ -50,28 +50,23 @@ public class Airport extends Thread implements Location {
         return airportName;
     }
 
-    public Airport(String airportName){
-        this.airportName = airportName;
-        this.start();
-    }
-
-    public void addAirstrip(Airstrip airstrip){
+    void addAirstrip(Airstrip airstrip){
         if (airstrips.indexOf(airstrip) == -1){
             airstrips.add(airstrip);
         }
     }
 
-    public List<Airstrip> getAirstrips(){
+    List<Airstrip> getAirstrips(){
         return this.airstrips;
     }
 
-    public void addParkingPlace(PlaneParkingPlace parkingPlace){
+    void addParkingPlace(PlaneParkingPlace parkingPlace){
         if (parkingPlaces.indexOf(parkingPlace) == -1){
             parkingPlaces.add(parkingPlace);
         }
     }
 
-    public List<PlaneParkingPlace> getParkingPlaces(){
+    List<PlaneParkingPlace> getParkingPlaces(){
         return this.parkingPlaces;
     }
 
@@ -87,15 +82,16 @@ public class Airport extends Thread implements Location {
         return planeService;
     }
 
-    public void setRadioTower(RadioTower radioTower) {
+    void setRadioTower(RadioTower radioTower) {
         this.radioTower = radioTower;
+        PrintService.printMessageObj("The radio tower is online!", this.radioTower);
     }
 
-    public void setPassengerService(PassengerService passengerService) {
+    void setPassengerService(PassengerService passengerService) {
         this.passengerService = passengerService;
     }
 
-    public void setPlaneService(PlaneService planeService) {
+    void setPlaneService(PlaneService planeService) {
         this.planeService = planeService;
     }
 
@@ -105,32 +101,5 @@ public class Airport extends Thread implements Location {
                 this.linkedAirports.add(airport);
             }
         }
-    }
-
-    private void iniAirport(){
-        if (coordinates == null){
-            setCoordinates(new Coordinates(new Random().nextInt(100),new Random().nextInt(100)));
-        }
-
-        int numAirstrips = new Random().nextInt(2)+1;
-        int numParks = new Random().nextInt(numAirstrips*10)+numAirstrips;
-
-        int i = 0;
-        while (i < numAirstrips || i < numParks) {
-            if (i < numAirstrips) {
-                this.addAirstrip(new Airstrip(this, i));
-            }
-
-            if (i < numParks) {
-                this.addParkingPlace(new PlaneParkingPlace(this, i));
-            }
-            i++;
-        }
-
-        PrintService.printMessageObj("The airport is online.", this);
-        radioTower = new RadioTower(this);
-        passengerService = new PassengerService(this);
-        planeService = new PlaneService(this);
-
     }
 }

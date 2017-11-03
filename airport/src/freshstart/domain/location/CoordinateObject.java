@@ -5,5 +5,5 @@ package freshstart.domain.location;
  */
 public interface CoordinateObject {
     Coordinates getCoordinates();
-    void setCoordinates(Coordinates coordinates);
+    //void setCoordinates(Coordinates coordinates);
 }

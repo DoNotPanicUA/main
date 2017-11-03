@@ -15,9 +15,11 @@ import java.util.Iterator;
  */
 public class RadioTower implements Location, ChildLocation<Airport> {
     private Airport linkedAirport;
+    private Coordinates coordinates;
 
-    @Override
-    public void setCoordinates(Coordinates coordinates){
+    RadioTower setCoordinates(Coordinates coordinates){
+        this.coordinates = coordinates;
+        return this;
     }
 
     @Override
@@ -37,12 +39,11 @@ public class RadioTower implements Location, ChildLocation<Airport> {
 
     @Override
     public Coordinates getCoordinates() {
-        return linkedAirport.getCoordinates();
+        return this.coordinates;
     }
 
-    public RadioTower(Airport airport){
+    RadioTower(Airport airport){
         this.linkedAirport = airport;
-        PrintService.printMessageObj("The radio tower is online!", this);
     }
 
     public void setLinkedAirport(Airport airport){

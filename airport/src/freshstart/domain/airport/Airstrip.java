@@ -8,6 +8,6 @@ import freshstart.domain.location.PlaneLocation;
 public class Airstrip extends PlaneLocation {
 
     public Airstrip(Airport airport, int number){
-        super(airport, "Airstrip #" + number + " (" + airport.getAirportName() + ")");
+        super(airport, "Airstrip #" + (number+1) + " (" + airport.getAirportName() + ")");
     }
 }

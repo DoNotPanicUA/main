@@ -7,7 +7,7 @@ import freshstart.domain.location.PlaneLocation;
  */
 public class PlaneParkingPlace extends PlaneLocation {
 
-    public PlaneParkingPlace(Airport airport, int number){
-        super(airport, "PlaneParking #" + number + " (" + airport.getAirportName() + ")");
+    PlaneParkingPlace(Airport airport, int number){
+        super(airport, "PlaneParking #" + (number+1) + " (" + airport.getAirportName() + ")");
     }
 }

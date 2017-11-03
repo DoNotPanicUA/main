@@ -19,9 +19,9 @@ public abstract class PlaneLocation<T extends Location> implements Location, Chi
         setCoordinates(globalLocation.getCoordinates());
     }
 
-    @Override
-    public void setCoordinates(Coordinates coordinates){
+    PlaneLocation setCoordinates(Coordinates coordinates){
         this.coordinates = coordinates;
+        return this;
     }
 
     @Override

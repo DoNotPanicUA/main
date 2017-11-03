@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * Created by aleonets on 23.08.2017.
  */
-public class Plane extends Thread implements Named, CoordinateObject {
+public class Plane implements Named, CoordinateObject, Runnable {
     private Location currentLocation;
     private Coordinates coordinates;
     private Route route;
@@ -20,10 +20,10 @@ public class Plane extends Thread implements Named, CoordinateObject {
     private final Double planeSpeed = 0.2 /*Realistic 0.2 km/sec*/;
     private final Actions flyAction = Actions.PLANE_FLYMIN;
 
-    public Plane(String boardName, Location location){
+    Plane(String boardName){
         this.boardName = boardName;
         PrintService.printMessageObj("The plane has been initialized.", this);
-        setCurrentLocation(location);
+        //setCurrentLocation(location);
     }
 
     public void setRoute(Route route){
@@ -32,7 +32,7 @@ public class Plane extends Thread implements Named, CoordinateObject {
                 route.getDestinationTo().getObjectName() + " has been assigned", this);
     }
 
-    private void setCurrentLocation(Location currentLocation){
+    void setCurrentLocation(Location currentLocation){
         if (this.currentLocation != null & this.currentLocation instanceof PlaneLocation){
             ((PlaneLocation) this.currentLocation).freeLocation();
         }
@@ -129,8 +129,8 @@ public class Plane extends Thread implements Named, CoordinateObject {
                 requestedAirstrip = linkedRadioTower.requestPlaneLocation(this, AirportObjects.AIRSTRIP);
                 if (requestedAirstrip != null){
                     Actions.PLANE_LAND.doAction();
-                    PrintService.printMessageObj("Landed on the "+ requestedAirstrip.getObjectName(), this);
                     setCurrentLocation(requestedAirstrip);
+                    PrintService.printMessageObj("Landed on the "+ requestedAirstrip.getObjectName(), this);
 
                     moveToParking();
                 }else{
@@ -165,7 +165,7 @@ public class Plane extends Thread implements Named, CoordinateObject {
     }
 
     private void flyByRoute(){
-        if (route != null & route.getFlyDate().before(new Date())){
+        if (route.getFlyDate().before(new Date())){
             while (currentLocation == null || !compareGlobalLocations(currentLocation, route.getDestinationTo())){
                 if (currentLocation != null){
                     takeOff();
@@ -180,7 +180,7 @@ public class Plane extends Thread implements Named, CoordinateObject {
         }
     }
 
-    public void setCoordinates(Coordinates coordinates) {
+    void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
         PrintService.printMessageObj("Update coordinates", this);
     }
@@ -192,9 +192,12 @@ public class Plane extends Thread implements Named, CoordinateObject {
 
     @Override
     public void run() {
-        super.run();
         while (true){
-            flyByRoute();
+            if (this.route != null){
+                flyByRoute();
+            }else{
+                Actions.STANDBY.doAction();
+            }
         }
     }
 }
