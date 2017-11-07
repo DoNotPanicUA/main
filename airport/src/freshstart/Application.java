@@ -5,7 +5,7 @@ import freshstart.domain.aircraft.Plane;
 import freshstart.domain.airport.Airport;
 import freshstart.domain.airport.AirportFactory;
 import freshstart.domain.common.Actions;
-import freshstart.domain.location.Route;
+import freshstart.domain.aircraft.Route;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,8 +31,9 @@ public class Application {
         List<Airport> airports = new ArrayList<>();
 
         airports.add(AirportFactory.getInstanceAirport("Borispol"));
-        airports.add(AirportFactory.getInstanceAirport("Kyiv"));
-        airports.add(AirportFactory.getInstanceAirport("Hitrow"));
+        airports.add(AirportFactory.getInstanceAirport("John F. Kennedy"));
+        airports.add(AirportFactory.getInstanceAirport("Heathrow"));
+        airports.add(AirportFactory.getInstanceAirport("Seattle-Tacoma"));
 
         for (Airport airport : airports){
             airport.setLinkedAirports(airports);

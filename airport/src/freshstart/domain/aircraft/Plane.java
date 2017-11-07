@@ -58,7 +58,7 @@ public class Plane implements Named, CoordinateObject, Runnable {
 
     @Override
     public Coordinates getCoordinates() {
-        return (this.coordinates != null ? new Coordinates(this.coordinates.getX(), this.coordinates.getY()) : null);
+        return (this.coordinates != null ? this.coordinates.getCoordinates() : null);
     }
 
     private void groundMoveTo(AirportObjects destinationObject){
@@ -146,22 +146,16 @@ public class Plane implements Named, CoordinateObject, Runnable {
                                        coordinates.getY() + direction.getCoefY() * planeSpeed * flyAction.getDurationSec()));
     }
 
+    private Location getGlobalLocation(Location location){
+        if (location != null){
+            return (location instanceof ChildLocation ? ((ChildLocation)location).getParentLocation() : location);
+        }else{
+            return null;
+        }
+    }
+
     private boolean compareGlobalLocations(Location firstLocation, Location secondLocation){
-        Location firstGlobalLocation;
-        Location secondGlobalLocation;
-        if (firstLocation instanceof ChildLocation){
-            firstGlobalLocation = ((ChildLocation)firstLocation).getParentLocation();
-        }else{
-            firstGlobalLocation = firstLocation;
-        }
-
-        if (secondLocation instanceof ChildLocation){
-            secondGlobalLocation = ((ChildLocation)secondLocation).getParentLocation();
-        }else{
-            secondGlobalLocation = secondLocation;
-        }
-
-        return (firstGlobalLocation.equals(secondGlobalLocation));
+        return (getGlobalLocation(firstLocation).equals(getGlobalLocation(secondLocation)));
     }
 
     private void flyByRoute(){
@@ -185,6 +179,12 @@ public class Plane implements Named, CoordinateObject, Runnable {
         PrintService.printMessageObj("Update coordinates", this);
     }
 
+    private void requestRoute(){
+        if (this.route == null & currentLocation != null){
+
+        }
+    }
+
     @Override
     public String getObjectName() {
         return "Plane("+boardName+")";
@@ -196,6 +196,7 @@ public class Plane implements Named, CoordinateObject, Runnable {
             if (this.route != null){
                 flyByRoute();
             }else{
+
                 Actions.STANDBY.doAction();
             }
         }

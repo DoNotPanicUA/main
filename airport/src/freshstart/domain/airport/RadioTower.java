@@ -39,7 +39,7 @@ public class RadioTower implements Location, ChildLocation<Airport> {
 
     @Override
     public Coordinates getCoordinates() {
-        return this.coordinates;
+        return (this.coordinates != null ? this.coordinates.getCoordinates() : null);
     }
 
     RadioTower(Airport airport){
@@ -50,29 +50,17 @@ public class RadioTower implements Location, ChildLocation<Airport> {
         this.linkedAirport = airport;
     }
 
-    public synchronized <T extends PlaneLocation> T requestPlaneLocation(Plane plane, AirportObjects requestedObject){
+    public <T extends PlaneLocation> T requestPlaneLocation(Plane plane, AirportObjects requestedObject){
         T resultObject = null;
-        Iterator iterator = null;
 
         if (requestedObject == AirportObjects.AIRSTRIP){
-            iterator = linkedAirport.getAirstrips().iterator();
             PrintService.printMessageObj(plane.getObjectName() +" has requested an airstrip!", this);
+            Actions.RADIOTOWER_REQUEST.doAction();
+            resultObject = (T)linkedAirport.getPlaneService().requestAirstrip();
         }else if (requestedObject == AirportObjects.PLANEPARKINGPLACE){
-            iterator = linkedAirport.getParkingPlaces().iterator();
             PrintService.printMessageObj(plane.getObjectName() +" has requested a parking place!", this);
-        }
-
-        Actions.RADIOTOWER_REQUEST.doAction();
-
-        if (iterator != null){
-            while (iterator.hasNext() & resultObject == null){
-                T planeLocation = (T)iterator.next();
-
-                if (planeLocation.checkIsLocationFree()){
-                    //planeLocation.reserveLocation(plane);
-                    resultObject = planeLocation;
-                }
-            }
+            Actions.RADIOTOWER_REQUEST.doAction();
+            resultObject = (T)linkedAirport.getPlaneService().requestParking();
         }
 
         if (resultObject == null){

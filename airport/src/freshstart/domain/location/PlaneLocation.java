@@ -31,7 +31,7 @@ public abstract class PlaneLocation<T extends Location> implements Location, Chi
 
     @Override
     public Coordinates getCoordinates() {
-        return this.coordinates;
+        return (this.coordinates != null ? this.coordinates.getCoordinates() : null);
     }
 
     public boolean reserveLocation(Plane plane){

@@ -1,4 +1,8 @@
-package freshstart.domain.location;
+package freshstart.domain.aircraft;
+
+import freshstart.domain.location.Direction;
+import freshstart.domain.location.GeoLocationService;
+import freshstart.domain.location.Location;
 
 import java.util.Date;
 

@@ -32,7 +32,7 @@ public class Airport implements Location, Runnable {
 
     @Override
     public Coordinates getCoordinates() {
-        return coordinates;
+        return (this.coordinates != null ? this.coordinates.getCoordinates() : null);
     }
 
     @Override

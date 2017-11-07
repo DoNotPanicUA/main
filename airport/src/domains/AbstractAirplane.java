@@ -1,7 +1,7 @@
 package domains;
 
 import freshstart.domain.location.Location;
-import freshstart.domain.location.Route;
+import freshstart.domain.aircraft.Route;
 
 /**
  * Created by Red8 on 04/08/2017.
