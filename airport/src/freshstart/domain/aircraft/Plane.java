@@ -179,9 +179,25 @@ public class Plane implements Named, CoordinateObject, Runnable {
         PrintService.printMessageObj("Update coordinates", this);
     }
 
+    public double getPlaneSpeed(){
+        return this.planeSpeed;
+    }
+
+    public Airport getCurrentAirport(){
+        Location loc;
+        Airport air = null;
+        if (currentLocation != null){
+            loc = getGlobalLocation(currentLocation);
+            if (loc instanceof Airport){
+                air = (Airport)loc;
+            }
+        }
+        return air;
+    }
+
     private void requestRoute(){
         if (this.route == null & currentLocation != null){
-
+            getCurrentAirport().getPlaneService().requestRoute(this);
         }
     }
 
@@ -196,7 +212,7 @@ public class Plane implements Named, CoordinateObject, Runnable {
             if (this.route != null){
                 flyByRoute();
             }else{
-
+                requestRoute();
                 Actions.STANDBY.doAction();
             }
         }

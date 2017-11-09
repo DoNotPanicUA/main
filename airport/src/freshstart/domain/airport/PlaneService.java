@@ -1,6 +1,6 @@
 package freshstart.domain.airport;
 
-import freshstart.domain.aircraft.Route;
+import freshstart.domain.aircraft.Plane;
 import freshstart.domain.aircraft.RouteFactory;
 
 import java.util.Iterator;
@@ -47,9 +47,8 @@ public class PlaneService {
         return resultObject;
     }
 
-    public synchronized Route requestRoute(){
-        Route newRoute = RouteFactory.getRouteFrom(this.linkedAirport);
-        return newRoute;
+    public synchronized void requestRoute(Plane plane){
+        RouteFactory.requestRouteFrom(this.linkedAirport, plane);
     }
 
 }

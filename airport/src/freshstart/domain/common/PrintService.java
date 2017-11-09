@@ -1,5 +1,6 @@
 package freshstart.domain.common;
 
+import freshstart.domain.aircraft.Route;
 import freshstart.domain.location.CoordinateObject;
 import freshstart.domain.location.Coordinates;
 import freshstart.domain.location.Location;
@@ -28,5 +29,10 @@ public class PrintService {
         }
 
         printMessage((coorString != ""? coorString + " " : coorString) + (name != "" ? name + ": " : name ) + messageText);
+    }
+
+    public static void printRoute(Route route){
+        printMessage("Route(" + route.getRouteName() + ") from " + route.getDestinationFrom().getObjectName() + " to " + route.getDestinationTo().getObjectName() +
+        " is assigned to " + route.getAssignedPlane().getObjectName() + ". Distance: " + Math.round(route.getDistanceKM()) + " km, Fly at " + route.getFlyDate().toString() + " with arriving at " + route.getArrivingDate().toString());
     }
 }

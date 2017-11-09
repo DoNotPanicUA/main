@@ -2,19 +2,15 @@ package freshstart;
 
 import freshstart.domain.aircraft.AircraftFactory;
 import freshstart.domain.aircraft.Plane;
+import freshstart.domain.aircraft.RouteFactory;
 import freshstart.domain.airport.Airport;
 import freshstart.domain.airport.AirportFactory;
 import freshstart.domain.common.Actions;
-import freshstart.domain.aircraft.Route;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
-/**
- * Created by aleonets on 21.08.2017.
- */
 public class Application {
     private static List<Airport> knownAirports;
     private static List<Plane> knownPlanes;
@@ -57,7 +53,15 @@ public class Application {
     private static List<Plane> createPlanes(){
         List<Plane> planes = new ArrayList<>();
         Plane newPlane = AircraftFactory.getInstancePlane("APEK-005", knownAirports.get(0));
-        newPlane.setRoute(new Route().setDestination(knownAirports.get(0), knownAirports.get(1), new Date()));
+        //RouteFactory.requestRouteFrom(knownAirports.get(0), newPlane);
+        planes.add(newPlane);
+
+        newPlane = AircraftFactory.getInstancePlane("FANS-741", knownAirports.get(0));
+        //RouteFactory.requestRouteFrom(knownAirports.get(0), newPlane);
+        planes.add(newPlane);
+
+        newPlane = AircraftFactory.getInstancePlane("KARD-926", knownAirports.get(0));
+        //RouteFactory.requestRouteFrom(knownAirports.get(0), newPlane);
         planes.add(newPlane);
 
         return planes;
