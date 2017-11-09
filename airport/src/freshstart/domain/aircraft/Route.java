@@ -1,17 +1,18 @@
 package freshstart.domain.aircraft;
 
+import freshstart.domain.airport.Airport;
 import freshstart.domain.common.PrintService;
 import freshstart.domain.common.TimeInMilliSec;
+import freshstart.domain.location.AirportLocation;
 import freshstart.domain.location.Direction;
 import freshstart.domain.location.GeoLocationService;
-import freshstart.domain.location.Location;
 
 import java.util.Date;
 
 public abstract class Route {
     private String routeName;
-    private Location destinationFrom;
-    private Location destinationTo;
+    private AirportLocation destinationFrom;
+    private AirportLocation destinationTo;
     private Double distanceKM;
     private Date flyDate;
     private Date arrivingDate;
@@ -23,11 +24,11 @@ public abstract class Route {
         this.routeName = name;
     }
 
-    public Location getDestinationFrom() {
+    public AirportLocation getDestinationFrom() {
         return destinationFrom;
     }
 
-    public Location getDestinationTo() {
+    public AirportLocation getDestinationTo() {
         return destinationTo;
     }
 
@@ -59,7 +60,7 @@ public abstract class Route {
         return arrivingDate;
     }
 
-    Route setDestination(Location destinationFrom, Location destinationTo) {
+    Route setDestination(AirportLocation destinationFrom, AirportLocation destinationTo) {
         this.destinationTo = destinationTo;
         this.destinationFrom = destinationFrom;
         distanceKM = GeoLocationService.calculateDistance(destinationTo.getCoordinates(), destinationFrom.getCoordinates());
@@ -78,8 +79,13 @@ public abstract class Route {
         this.flyDate = timeShift;
     }
 
-    public void registerRoute(Plane plane){
-        //global registration ++
+    private void registerRouteInAirports(){
+        this.getDestinationFrom().getAirport().registerRoute(this);
+        this.getDestinationTo().getAirport().registerRoute(this);
+    }
+
+    void registerRoute(Plane plane){
+        registerRouteInAirports();
         this.assignedPlane = plane;
         plane.setRoute(this);
         setFlyDate();

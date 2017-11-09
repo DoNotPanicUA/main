@@ -19,7 +19,7 @@ public class PlaneService {
         this.linkedAirport = airport;
     }
 
-    synchronized Airstrip requestAirstrip(){
+    synchronized Airstrip requestAirstrip(Plane plane){
         Iterator<Airstrip> iterator = linkedAirport.getAirstrips().iterator();
         Airstrip resultObject = null;
 
@@ -27,13 +27,14 @@ public class PlaneService {
             Airstrip airstrip = iterator.next();
 
             if (airstrip.checkIsLocationFree()){
+                airstrip.reserveLocation(plane);
                 resultObject = airstrip;
             }
         }
         return resultObject;
     }
 
-    synchronized PlaneParkingPlace requestParking(){
+    synchronized PlaneParkingPlace requestParking(Plane plane){
         Iterator<PlaneParkingPlace> iterator = linkedAirport.getParkingPlaces().iterator();
         PlaneParkingPlace resultObject = null;
 
@@ -41,6 +42,7 @@ public class PlaneService {
             PlaneParkingPlace parkingPlace = iterator.next();
 
             if (parkingPlace.checkIsLocationFree()){
+                parkingPlace.reserveLocation(plane);
                 resultObject = parkingPlace;
             }
         }

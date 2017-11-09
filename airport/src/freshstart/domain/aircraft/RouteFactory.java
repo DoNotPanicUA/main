@@ -35,9 +35,9 @@ public class RouteFactory {
             toAirport = Application.getRandomKnownAirport();
         }
 
-        Route resultObject = new PlaneRoute(getNextRouteName()).setDestination(fromAirport, toAirport);
+        //Route resultObject =
 
-        return resultObject;
+        return new PlaneRoute(getNextRouteName()).setDestination(fromAirport, toAirport);
     }
 
     public static synchronized void requestRouteFrom(Airport airport, Plane plane)

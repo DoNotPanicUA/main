@@ -11,7 +11,7 @@ public enum Actions {
     PLANE_TAKEOFF(TimeInMilliSec.TENSECOND.getTimeInMilliSecs()),
     PLANE_REQUESTRADIOTOWER(TimeInMilliSec.FIVESECONDS.getTimeInMilliSecs()),
     PLANE_LAND(TimeInMilliSec.TENSECOND.getTimeInMilliSecs()),
-    PLANE_FLYMIN(TimeInMilliSec.MINUTE.getTimeInMilliSecs()),
+    PLANE_FLYMIN(TimeInMilliSec.TENSECOND.getTimeInMilliSecs()),
     PLANE_GROUNDMOVE(3*TimeInMilliSec.FIVESECONDS.getTimeInMilliSecs()),
 
     RADIOTOWER_REQUEST(3*TimeInMilliSec.FIVESECONDS.getTimeInMilliSecs());

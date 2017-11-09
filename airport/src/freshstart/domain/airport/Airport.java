@@ -1,33 +1,46 @@
 package freshstart.domain.airport;
 
+import freshstart.domain.aircraft.Route;
 import freshstart.domain.common.Actions;
 import freshstart.domain.common.PrintService;
 import freshstart.domain.location.Coordinates;
-import freshstart.domain.location.Location;
+import freshstart.domain.location.AirportLocation;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-/**
- * Created by aleonets on 21.08.2017.
- */
-public class Airport implements Location, Runnable {
+public class Airport implements AirportLocation, Runnable {
     private String airportName;
     private List<Airstrip> airstrips = new ArrayList<>();
     private List<PlaneParkingPlace> parkingPlaces = new ArrayList<>();
     private RadioTower radioTower;
     private PassengerService passengerService;
     private PlaneService planeService;
-    private List<Airport> linkedAirports = new ArrayList<>();
+    //private List<Airport> linkedAirports = new ArrayList<>();
     private Coordinates coordinates;
+    private ArrayList<Route> registeredRoutes = new ArrayList<>();
 
     Airport(String airportName){
         this.airportName = airportName;
     }
 
+    @Override
+    public Airport getAirport() {
+        return this;
+    }
+
     public String getObjectName() {
         return "Airport("+airportName+")";
+    }
+
+    public void registerRoute(Route route){
+        if (!this.registeredRoutes.contains(route)){
+            this.registeredRoutes.add(route);
+        }
+    }
+
+    boolean checkRouteRegistration(Route route){
+        return this.registeredRoutes.contains(route);
     }
 
     @Override
@@ -42,7 +55,7 @@ public class Airport implements Location, Runnable {
         }
     }
 
-    public void setCoordinates(Coordinates coordinates) {
+    void setCoordinates(Coordinates coordinates) {
         this.coordinates = coordinates;
     }
 
@@ -74,11 +87,11 @@ public class Airport implements Location, Runnable {
         return radioTower;
     }
 
-    public PassengerService getPassengerService() {
+    PassengerService getPassengerService() {
         return passengerService;
     }
 
-    public PlaneService getPlaneService() {
+    PlaneService getPlaneService() {
         return planeService;
     }
 
@@ -93,13 +106,5 @@ public class Airport implements Location, Runnable {
 
     void setPlaneService(PlaneService planeService) {
         this.planeService = planeService;
-    }
-
-    public void setLinkedAirports(List<Airport> linkedAirports) {
-        for (Airport airport : linkedAirports){
-            if(!airport.equals(this) && this.linkedAirports.indexOf(airport) == -1){
-                this.linkedAirports.add(airport);
-            }
-        }
     }
 }

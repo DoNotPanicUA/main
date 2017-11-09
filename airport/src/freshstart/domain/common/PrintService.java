@@ -3,7 +3,6 @@ package freshstart.domain.common;
 import freshstart.domain.aircraft.Route;
 import freshstart.domain.location.CoordinateObject;
 import freshstart.domain.location.Coordinates;
-import freshstart.domain.location.Location;
 
 import java.util.Date;
 

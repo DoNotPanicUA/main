@@ -2,7 +2,6 @@ package freshstart;
 
 import freshstart.domain.aircraft.AircraftFactory;
 import freshstart.domain.aircraft.Plane;
-import freshstart.domain.aircraft.RouteFactory;
 import freshstart.domain.airport.Airport;
 import freshstart.domain.airport.AirportFactory;
 import freshstart.domain.common.Actions;
@@ -30,10 +29,6 @@ public class Application {
         airports.add(AirportFactory.getInstanceAirport("John F. Kennedy"));
         airports.add(AirportFactory.getInstanceAirport("Heathrow"));
         airports.add(AirportFactory.getInstanceAirport("Seattle-Tacoma"));
-
-        for (Airport airport : airports){
-            airport.setLinkedAirports(airports);
-        }
 
         return airports;
     }

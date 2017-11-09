@@ -1,13 +1,13 @@
 package domains;
 
-import freshstart.domain.location.Location;
+import freshstart.domain.location.AirportLocation;
 import freshstart.domain.aircraft.Route;
 
 /**
  * Created by Red8 on 04/08/2017.
  */
 public abstract class AbstractAirplane {
-    private Location currentLocation;
+    private AirportLocation currentAirportLocation;
     private boolean isFueled;
     private Route currentRoute;
     private Double maxSpeed;
@@ -22,11 +22,11 @@ public abstract class AbstractAirplane {
     public abstract <T extends PlaneLandableLocation> void toLand(T location);
 
     // Private
-    private void setLocation(Location location){
-        this.currentLocation = location;
+    private void setLocation(AirportLocation airportLocation){
+        this.currentAirportLocation = airportLocation;
     }
 
-    private Location getCurrentLocation(){
-        return this.currentLocation;
+    private AirportLocation getCurrentAirportLocation(){
+        return this.currentAirportLocation;
     }
 }
