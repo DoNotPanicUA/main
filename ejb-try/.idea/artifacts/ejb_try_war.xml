@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="ejb-try:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="WebService-Try2-0.1.1.war">
+      <element id="artifact" artifact-name="ejb-try:war exploded" />
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-ear" name="WebService-Try2:ear exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/WebService_Try2_ear_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="WebService-Try2/javaeeApplication/javaEEApplication" />
+      <element id="directory" name="web.war">
+        <element id="artifact" artifact-name="WebService-Try2:war exploded" />
+      </element>
+    </root>
+  </artifact>
+</component>

@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-ejb" name="ejb-try:ejb exploded">
+    <output-path>$PROJECT_DIR$/target/ejb-try-0.1.1</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="ejb-try/ejb/EJB" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/ejb-try-0.1.1/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="ejb-try" />
+    </root>
+  </artifact>
+</component>
